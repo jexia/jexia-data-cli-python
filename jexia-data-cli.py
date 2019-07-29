@@ -8,8 +8,8 @@ import requests
 
 
 DESCRIPTION = """
-Jexia-dataset-exporter allows export/import data from/to the dataset. To use
-exporter you need: 1. Create dataset; 2. Create additional user in UMS;
+Jexia-data-cli allows export/import data from/to the dataset. To use
+utility you need: 1. Create dataset; 2. Create additional user in UMS;
 3. Create a policy for this user to read/write the dataset.
 """
 AUTH_URL = "https://{}.app.jexia.com/auth"
@@ -66,7 +66,7 @@ class HTTPRequest(object):
         self.token = {"Authorization": "Bearer {}".format(res["access_token"])}
 
 
-class Exporter(HTTPRequest):
+class DatasetManager(HTTPRequest):
 
     def __init__(self, email, password, project, type):
         super().__init__(email, password, project)
@@ -148,11 +148,11 @@ if __name__ == "__main__":
         pass
     email = input("Please, enter email:\n")
     password = getpass.getpass("Please, enter password:\n")
-    exporter = Exporter(email, password, args.project, args.type)
+    manager = DatasetManager(email, password, args.project, args.type)
     try:
         if args.e:
-            exporter.download(dataset=args.dataset, file=args.file)
+            manager.download(dataset=args.dataset, file=args.file)
         elif args.i:
-            exporter.upload(dataset=args.dataset, file=args.file)
+            manager.upload(dataset=args.dataset, file=args.file)
     except RequestError as err:
         print("Error: %s" % err.message)
